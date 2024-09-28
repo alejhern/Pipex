@@ -12,13 +12,14 @@
 
 #include "pipex.h"
 
-static void	parent_procces(int *previous_fd, pid_t pid, int *pipefd, int index)
+static void	parent_procces(int *previous_fd, pid_t pid, int *pipefd, int *index)
 {
 	waitpid(pid, NULL, 0);
 	close(pipefd[1]);
-	if (index != 2)
+	if (*index != 2)
 		close(*previous_fd);
 	*previous_fd = pipefd[0];
+	*index += 1;
 }
 
 static void	child_procces(char *cmd, char **env, int input_fd, int output_fd)
@@ -79,10 +80,7 @@ void	pipex(int argc, char **argv, char **env)
 			exit(0);
 		}
 		else
-		{
-			parent_procces(&fds[2], pid, pipefd, index);
-			index++;
-		}
+			parent_procces(&fds[2], pid, pipefd, &index);
 	}
 }
 
@@ -90,7 +88,7 @@ int	main(int argc, char **argv, char **env)
 {
 	if (argc < 5)
 	{
-		printf("Uso:%s <file_in> <cmd1> <cmd2> <file_out>\n", argv[0]);
+		printf("Uso:%s <file_in> <cmd1> ... <cmd2> <file_out>\n", argv[0]);
 		exit(EXIT_FAILURE);
 	}
 	pipex(argc, argv, env);

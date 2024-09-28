@@ -40,7 +40,6 @@ char	*find_path(char *cmd, char **env)
 	paths = ft_split(*env + 5, ':');
 	if (!paths)
 		error_exit("malloc err");
-	path = NULL;
 	tmp_paths = paths;
 	while (*tmp_paths)
 	{
