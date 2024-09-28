@@ -62,5 +62,4 @@ re: fclean all
 # **************************************************************************** #
 
 bonus: $(LIBFT) $(OBJ)
-	cp $(LIBFT) $(NAME)
-	ar -q $(NAME) $(OBJ)
+	$(CC) $(CFLAGS) $(OBJ) -L$(LIB_DIR) -lft -o $(NAME)
