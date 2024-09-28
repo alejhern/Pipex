@@ -6,7 +6,7 @@
 /*   By: alejhern <alejhern@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 03:54:43 by alejhern          #+#    #+#             */
-/*   Updated: 2024/09/28 16:55:06 by alejhern         ###   ########.fr       */
+/*   Updated: 2024/09/29 00:56:34 by alejhern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static void	child_procces(char *cmd, char **env, int input_fd, int output_fd)
 	close(input_fd);
 	close(output_fd);
 	execute(cmd, env);
+	error_exit("comand not found!");
 }
 
 static void	init_pipe(pid_t *pid, int *pipefd, int index, int argc)
