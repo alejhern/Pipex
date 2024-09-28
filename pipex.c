@@ -6,44 +6,11 @@
 /*   By: alejhern <alejhern@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 03:54:43 by alejhern          #+#    #+#             */
-/*   Updated: 2024/09/28 04:20:33 by alejhern         ###   ########.fr       */
+/*   Updated: 2024/09/28 16:55:06 by alejhern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-#include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/wait.h>
-#include <unistd.h>
-
-/*
-static void	parent_procces(char **argv, char **env, int *fd)
-{
-	int	fd_out;
-
-	fd_out = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	if (fd_out == -1)
-		error_exit("open archivo entrada");
-	dup2(fd[0], STDIN_FILENO);
-	dup2(fd_out, STDOUT_FILENO);
-	close(fd[1]);
-	execute(argv[3], env);
-}
-
-static void	child_procces(char **argv, char **env, int *fd)
-{
-	int	fd_in;
-
-	fd_in = open(argv[1], O_RDONLY);
-	if (fd_in == -1)
-		error_exit("open archivo entrada");
-	dup2(fd[1], STDOUT_FILENO);
-	dup2(fd_in, STDIN_FILENO);
-	close(fd[0]);
-	execute(argv[2], env);
-}
-*/
 
 static void	parent_procces(int *previous_fd, pid_t pid, int *pipefd, int index)
 {
@@ -82,7 +49,10 @@ static void	open_files(int *fds, int argc, char **argv)
 		error_exit("Error al abrir el archivo de entrada");
 	fds[1] = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (fds[1] == -1)
+	{
+		close(fds[0]);
 		error_exit("Error al abrir el archivo de salida");
+	}
 	fds[2] = 0;
 }
 
@@ -95,7 +65,7 @@ void	pipex(int argc, char **argv, char **env)
 
 	open_files(fds, argc, argv);
 	index = 2;
-	while (argv[index])
+	while (index < argc -1)
 	{
 		init_pipe(&pid, pipefd, index, argc);
 		if (pid == 0)
@@ -109,11 +79,11 @@ void	pipex(int argc, char **argv, char **env)
 			exit(0);
 		}
 		else
+		{
 			parent_procces(&fds[2], pid, pipefd, index);
-		index++;
+			index++;
+		}
 	}
-	close(fds[0]);
-	close(fds[1]);
 }
 
 int	main(int argc, char **argv, char **env)

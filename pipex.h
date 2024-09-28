@@ -6,7 +6,7 @@
 /*   By: alejhern <alejhern@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 16:02:52 by alejhern          #+#    #+#             */
-/*   Updated: 2024/09/28 04:01:43 by alejhern         ###   ########.fr       */
+/*   Updated: 2024/09/28 16:00:37 by alejhern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,11 @@
 # define PIPEX_H
 
 # include "libft/libft.h"
+# include <fcntl.h>
 # include <stdio.h>
+# include <stdlib.h>
+# include <sys/wait.h>
+# include <unistd.h>
 
 char	*find_path(char *cmd, char **envp);
 void	execute(char *argv, char **envp);
