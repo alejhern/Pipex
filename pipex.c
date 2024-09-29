@@ -44,20 +44,6 @@ static void	init_pipe(pid_t *pid, int *pipefd, int index, int argc)
 		error_exit("Error al hacer fork");
 }
 
-static void	open_files(int *fds, int argc, char **argv)
-{
-	fds[0] = open(argv[1], O_RDONLY);
-	if (fds[0] == -1)
-		error_exit("Error al abrir el archivo de entrada");
-	fds[1] = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	if (fds[1] == -1)
-	{
-		close(fds[0]);
-		error_exit("Error al abrir el archivo de salida");
-	}
-	fds[2] = 0;
-}
-
 void	pipex(int argc, char **argv, char **env)
 {
 	int		pipefd[2];
@@ -67,7 +53,7 @@ void	pipex(int argc, char **argv, char **env)
 
 	open_files(fds, argc, argv);
 	index = 2;
-	while (index < argc -1)
+	while (index < argc - 1)
 	{
 		init_pipe(&pid, pipefd, index, argc);
 		if (pid == 0)
@@ -89,7 +75,7 @@ int	main(int argc, char **argv, char **env)
 {
 	if (argc < 5)
 	{
-		printf("Uso:%s <file_in> <cmd1> ... <cmd2> <file_out>\n", argv[0]);
+		printf("Uso:%s <file_in> <cmd> ... <cmd> <file_out>\n", argv[0]);
 		exit(EXIT_FAILURE);
 	}
 	pipex(argc, argv, env);

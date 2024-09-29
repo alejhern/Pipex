@@ -20,7 +20,7 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-char	*find_path(char *cmd, char **envp);
+void	open_files(int *fds, int argc, char **argv);
 void	execute(char *argv, char **envp);
 void	error_exit(const char *msg);
 void	pipex(int argc, char **argv, char **env);

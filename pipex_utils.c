@@ -22,13 +22,7 @@ static void	free_array(char **arr)
 	free(arr);
 }
 
-void	error_exit(const char *msg)
-{
-	perror(msg);
-	exit(EXIT_FAILURE);
-}
-
-char	*find_path(char *cmd, char **env)
+static char	*find_path(char *cmd, char **env)
 {
 	char	**paths;
 	char	**tmp_paths;
@@ -55,6 +49,26 @@ char	*find_path(char *cmd, char **env)
 	}
 	free_array(paths);
 	return (path);
+}
+
+void	error_exit(const char *msg)
+{
+	perror(msg);
+	exit(EXIT_FAILURE);
+}
+
+void	open_files(int *fds, int argc, char **argv)
+{
+	fds[0] = open(argv[1], O_RDONLY);
+	if (fds[0] == -1)
+		error_exit("Error al abrir el archivo de entrada");
+	fds[1] = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (fds[1] == -1)
+	{
+		close(fds[0]);
+		error_exit("Error al abrir el archivo de salida");
+	}
+	fds[2] = 0;
 }
 
 void	execute(char *argv, char **env)
