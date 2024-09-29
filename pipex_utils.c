@@ -6,7 +6,7 @@
 /*   By: alejhern <alejhern@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 03:54:52 by alejhern          #+#    #+#             */
-/*   Updated: 2024/09/24 16:05:04 by alejhern         ###   ########.fr       */
+/*   Updated: 2024/09/29 19:50:26 by alejhern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,20 +57,6 @@ void	error_exit(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
-void	open_files(int *fds, int argc, char **argv)
-{
-	fds[0] = open(argv[1], O_RDONLY);
-	if (fds[0] == -1)
-		error_exit("Error al abrir el archivo de entrada");
-	fds[1] = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	if (fds[1] == -1)
-	{
-		close(fds[0]);
-		error_exit("Error al abrir el archivo de salida");
-	}
-	fds[2] = 0;
-}
-
 void	execute(char *argv, char **env)
 {
 	char	**cmd;
@@ -91,4 +77,28 @@ void	execute(char *argv, char **env)
 	free(path);
 	if (resp == -1)
 		error_exit("exec err");
+}
+
+void	here_doc(char **argv, int argc, int *pipefd)
+{
+	char	*ret;
+
+	if (argc < 6)
+	{
+		ft_printf("Uso:%s here_doc DELIMITER <c1> ... <file_out>\n", argv[0]);
+		exit(EXIT_FAILURE);
+	}
+	close(pipefd[0]);
+	while (1)
+	{
+		ret = get_next_line(0);
+		if (ft_strncmp(ret, argv[2], ft_strlen(argv[2])) == 0)
+		{
+			free(ret);
+			exit(0);
+		}
+		if (ft_putstr_fd(ret, pipefd[1]) == -1)
+			error_exit("write error");
+		free(ret);
+	}
 }
