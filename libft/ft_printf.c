@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "ft_printf.h"
 
 static void	ft_prepare_nb(int nb, t_flags flags, int base, int *len)
 {
@@ -43,24 +44,22 @@ static int	type_var(char c, va_list element, t_flags flags)
 	len = 0;
 	if (c == 'c')
 		ft_printchar(va_arg(element, int), flags, &len);
-	if (c == 's')
+	else if (c == '%')
+		ft_printchar('%', init_flags(0), &len);
+	else if (c == 's')
 		ft_printstr(va_arg(element, char *), flags, &len);
-	if (c == 'p')
+	else if (c == 'p')
 		ft_printpointer(va_arg(element, void *), flags, &len);
-	if (c == 'd' || c == 'i')
+	else if (c == 'd' || c == 'i')
 		ft_prepare_nb(va_arg(element, int), flags, 0, &len);
-	if (c == 'u')
+	else if (c == 'u')
 		ft_prepare_nb(va_arg(element, int), flags, 10, &len);
-	if (c == 'x')
+	else if (c == 'x')
 		ft_prepare_nb(va_arg(element, int), flags, 16, &len);
-	if (c == 'X')
+	else if (c == 'X')
 	{
 		flags.bl_mayus = 1;
 		ft_prepare_nb(va_arg(element, int), flags, 16, &len);
-	}
-	if (c == '%')
-	{
-		ft_printchar('%', init_flags(0), &len);
 	}
 	return (len);
 }

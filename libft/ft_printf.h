@@ -38,6 +38,5 @@ void	ft_printstr(char *str, t_flags flags, int *len);
 void	ft_printnbr(int nb, char *str, t_flags flags, int *len);
 void	ft_printnbr_hex(unsigned int nb, char *str, t_flags flags, int *len);
 void	ft_printpointer(void *ptr, t_flags flags, int *len);
-int		ft_printf(char const *str, ...);
 
 #endif

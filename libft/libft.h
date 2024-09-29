@@ -14,7 +14,7 @@
 # define LIBFT_H
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1
+#  define BUFFER_SIZE 42
 # endif
 
 # include <unistd.h>
@@ -23,7 +23,6 @@
 # include <stddef.h>
 # include <stdint.h>
 # include <limits.h>
-# include "ft_printf.h"
 
 typedef struct s_list
 {
@@ -83,6 +82,8 @@ void	*ft_memcpy(void *dest, const void *src, size_t n);
 void	*ft_memmove(void *dest, const void *src, size_t n);
 // Declarations from ft_memset.c
 void	*ft_memset(void *dest, int c, size_t len);
+// Declarations from ft_printf.c
+int		ft_printf(char const *str, ...);
 // Declarations from ft_putchar_fd.c
 int		ft_putchar_fd(char c, int fd);
 // Declarations from ft_putendl_fd.c
