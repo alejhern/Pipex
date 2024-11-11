@@ -6,17 +6,15 @@
 #    By: alejhern <alejhern@student.42barcelona.co  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/09 21:50:18 by alejhern          #+#    #+#              #
-#    Updated: 2024/09/23 17:57:24 by alejhern         ###   ########.fr        #
+#    Updated: 2024/11/11 10:16:58 by amhernandez      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 LIB_DIR = libft/
 
 SRCS = pipex.c pipex_utils.c
-# SRCS_B = ft_parse_flags_bonus.c ft_printers_bonus.c ft_printf_bonus.c 
 
 OBJ = $(SRCS:.c=.o)
-# OBJ_B = $(SRCS_B:.c=.o)
 
 # **************************************************************************** #
 #                                 VARIABLES                                    #
