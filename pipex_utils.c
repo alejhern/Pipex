@@ -6,7 +6,7 @@
 /*   By: alejhern <alejhern@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 03:54:52 by alejhern          #+#    #+#             */
-/*   Updated: 2024/09/29 19:50:26 by alejhern         ###   ########.fr       */
+/*   Updated: 2025/01/07 19:54:26 by alejhern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,20 +35,20 @@ static char	*find_path(char *cmd, char **env)
 	if (!paths)
 		error_exit("malloc err");
 	tmp_paths = paths;
+	path = NULL;
 	while (*tmp_paths)
 	{
-		cmd_path = ft_strjoin(*tmp_paths, "/");
+		cmd_path = ft_strjoin(*tmp_paths++, "/");
 		if (!cmd_path)
 			break ;
 		path = ft_strjoin(cmd_path, cmd);
 		free(cmd_path);
-		if (!path || access(path, F_OK) == 0)
+		if (path && access(path, F_OK) == 0)
 			break ;
 		free(path);
-		tmp_paths++;
+		path = NULL;
 	}
-	free_array(paths);
-	return (path);
+	return (free_array(paths), path);
 }
 
 void	error_exit(const char *msg)
