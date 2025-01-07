@@ -6,7 +6,7 @@
 #    By: alejhern <alejhern@student.42barcelona.co  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/09 21:50:18 by alejhern          #+#    #+#              #
-#    Updated: 2024/11/11 10:16:58 by amhernandez      ###   ########.fr        #
+#    Updated: 2025/01/08 00:15:23 by alejhern         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,5 +59,4 @@ re: fclean all
 #                                BONUS                                         #
 # **************************************************************************** #
 
-bonus: $(LIBFT) $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -L$(LIB_DIR) -lft -o $(NAME)
+bonus: $(NAME)
