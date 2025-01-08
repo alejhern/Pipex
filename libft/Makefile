@@ -15,12 +15,16 @@
 # **************************************************************************** #
 
 SRCS	=	ft_atoi.c															\
+			ft_atol.c															\
 			ft_bzero.c															\
 			ft_calloc.c															\
+			ft_error_exit.c														\
+			ft_free_array.c														\
 			ft_isalnum.c														\
 			ft_isalpha.c														\
 			ft_isascii.c														\
 			ft_isdigit.c														\
+			ft_isnum.c															\
 			ft_isprint.c														\
 			ft_itoa.c															\
 			ft_itoa_base.c														\

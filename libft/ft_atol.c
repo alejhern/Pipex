@@ -1,33 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memmove.c                                       :+:      :+:    :+:   */
+/*   ft_atol.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alejhern <alejhern@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/15 23:05:08 by alejhern          #+#    #+#             */
-/*   Updated: 2024/10/02 21:08:24 by alejhern         ###   ########.fr       */
+/*   Created: 2024/06/15 23:29:33 by alejhern          #+#    #+#             */
+/*   Updated: 2025/01/08 00:55:39 by amhernandez      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memmove(void *dest, const void *src, size_t n)
+long	ft_atol(const char *str)
 {
-	unsigned char	*d;
-	unsigned char	*s;
+	long		result;
+	long		sign;
 
-	d = (unsigned char *) dest;
-	s = (unsigned char *) src;
-	if (s < d && s + n > d)
+	result = 0;
+	sign = 1;
+	while (*str == ' ' || (*str >= '\t' && *str <= '\r'))
+		str++;
+	if (*str == '-' || *str == '+')
 	{
-		while (n > 0)
-		{
-			d[n - 1] = s[n - 1];
-			n--;
-		}
+		if (*str == '-')
+			sign *= -1;
+		str++;
 	}
-	else
-		ft_memcpy(d, s, n);
-	return (dest);
+	while (ft_isdigit(*str))
+	{
+		result = result * 10 + *str - '0';
+		str++;
+	}
+	return (sign * result);
 }
