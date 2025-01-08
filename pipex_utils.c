@@ -80,6 +80,7 @@ void	here_doc(char **argv, int argc, int *pipefd)
 	close(pipefd[0]);
 	while (1)
 	{
+		ft_putstr_fd("pipe heredoc> ", 0);
 		ret = get_next_line(0);
 		if (ft_strncmp(ret, argv[2], ft_strlen(argv[2])) == 0)
 		{
