@@ -17,3 +17,9 @@ void	ft_error_exit(char *msg)
 	ft_putendl_fd(msg, 2);
 	exit(EXIT_FAILURE);
 }
+
+void	ft_perror_exit(char *msg)
+{
+	perror(msg);
+	exit(EXIT_FAILURE);
+}

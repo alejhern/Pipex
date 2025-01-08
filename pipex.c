@@ -58,12 +58,12 @@ static int	prepare_pipex(int *fds, int argc, char **argv)
 	}
 	fds[0] = open(argv[1], O_RDONLY);
 	if (fds[0] == -1)
-		ft_error_exit("No such file or directory");
+		ft_perror_exit("");
 	fds[1] = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (fds[1] == -1)
 	{
 		close(fds[0]);
-		ft_error_exit("No such file or directory");
+		ft_perror_exit("");
 	}
 	fds[2] = 0;
 	return (2);

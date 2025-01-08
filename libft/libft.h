@@ -23,6 +23,7 @@
 # include <stdint.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <stdio.h>
 
 typedef struct s_list
 {
@@ -40,6 +41,7 @@ void				ft_bzero(void *s, size_t len);
 void				*ft_calloc(size_t nmemb, size_t size);
 // Declarations from ft_error_exit.c
 void				ft_error_exit(char *msg);
+void				ft_perror_exit(char *msg);
 // Declarations from ft_free_array.c
 void				ft_free_array(void ***array);
 // Declarations from ft_isalnum.c
