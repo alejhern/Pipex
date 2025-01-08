@@ -20,7 +20,6 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-void	error_exit(const char *msg);
 void	execute(char *argv, char **envp);
 void	here_doc(char **argv, int argc, int *pipefd);
 

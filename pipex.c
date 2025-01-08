@@ -36,11 +36,11 @@ static void	init_pipe(pid_t *pid, int *pipefd, int index, int argc)
 	if (index != argc - 2)
 	{
 		if (pipe(pipefd) == -1)
-			error_exit("Resource temporarily unavailable");
+			ft_error_exit("Resource temporarily unavailable");
 	}
 	*pid = fork();
 	if (*pid == -1)
-		error_exit("Cannot allocate memory");
+		ft_error_exit("Cannot allocate memory");
 }
 
 static int	prepare_pipex(int *fds, int argc, char **argv)
@@ -58,12 +58,12 @@ static int	prepare_pipex(int *fds, int argc, char **argv)
 	}
 	fds[0] = open(argv[1], O_RDONLY);
 	if (fds[0] == -1)
-		error_exit("");
+		ft_error_exit("No such file or directory");
 	fds[1] = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (fds[1] == -1)
 	{
 		close(fds[0]);
-		error_exit("");
+		ft_error_exit("No such file or directory");
 	}
 	fds[2] = 0;
 	return (2);

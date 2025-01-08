@@ -11,23 +11,6 @@
 /* ************************************************************************** */
 
 #include "pipex.h"
-#include <string.h>
-
-void	error_exit(const char *msg)
-{
-	perror(msg);
-	exit(EXIT_FAILURE);
-}
-
-static void	free_array(char **arr)
-{
-	int	index;
-
-	index = 0;
-	while (arr[index])
-		free(arr[index++]);
-	free(arr);
-}
 
 static char	*find_path(char *cmd, char **env)
 {
@@ -40,7 +23,7 @@ static char	*find_path(char *cmd, char **env)
 		env++;
 	paths = ft_split(*env + 5, ':');
 	if (!paths)
-		error_exit("malloc err");
+		ft_error_exit("malloc err");
 	tmp_paths = paths;
 	path = NULL;
 	while (*tmp_paths)
@@ -55,7 +38,7 @@ static char	*find_path(char *cmd, char **env)
 		free(path);
 		path = NULL;
 	}
-	return (free_array(paths), path);
+	return (ft_free_array((void ***)&paths), path);
 }
 
 void	execute(char *argv, char **env)
@@ -66,7 +49,7 @@ void	execute(char *argv, char **env)
 
 	cmd = ft_split(argv, ' ');
 	if (!cmd)
-		error_exit("Cannot allocate memory");
+		ft_error_exit("Cannot allocate memory");
 	if (access(cmd[0], F_OK) == 0)
 		path = cmd[0];
 	else
@@ -75,14 +58,14 @@ void	execute(char *argv, char **env)
 	{
 		ft_putstr_fd("comand not found: ", 2);
 		ft_putendl_fd(cmd[0], 2);
-		free_array(cmd);
+		ft_free_array((void ***)&cmd);
 		return ;
 	}
 	resp = execve(path, cmd, env);
-	free_array(cmd);
+	ft_free_array((void ***)&cmd);
 	free(path);
 	if (resp == -1)
-		error_exit("");
+		ft_error_exit("Cannot execute command");
 }
 
 void	here_doc(char **argv, int argc, int *pipefd)
@@ -104,7 +87,7 @@ void	here_doc(char **argv, int argc, int *pipefd)
 			exit(0);
 		}
 		if (ft_putstr_fd(ret, pipefd[1]) == -1)
-			error_exit("write error");
+			ft_error_exit("Cannot write to file");
 		free(ret);
 	}
 }
