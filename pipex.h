@@ -6,7 +6,7 @@
 /*   By: alejhern <alejhern@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 16:02:52 by alejhern          #+#    #+#             */
-/*   Updated: 2024/09/29 19:49:59 by alejhern         ###   ########.fr       */
+/*   Updated: 2025/01/12 19:16:38 by alejhern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,6 @@
 
 void	execute(char *argv, char **envp);
 void	here_doc(char **argv, int argc, int *pipefd);
+int		exit_status(int status, int *fds, pid_t pid);
 
 #endif
