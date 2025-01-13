@@ -48,13 +48,22 @@ static void	init_pipe(t_pipex *pipex, int index, int argc)
 
 static int	prepare_pipex(t_pipex *pipex, int argc, char **argv)
 {
-	if (ft_strncmp(argv[1], "here_doc", 8) == 0)
+	pipex->fds[2] = 0;
+	pipex->status = 0;
+	if ((ft_strncmp(argv[1], "here_doc", 8) == 0 && argc > 5)
+		|| (ft_strncmp(argv[1], "here_doc", 8) != 0 && argc > 4))
 	{
 		pipex->fds[1] = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC,
 				0777);
-		pipex->fds[2] = 0;
-		return (3);
+		if (pipex->fds[1] == -1)
+		{
+			perror("");
+			ft_putstr_fd(" :", STDERR_FILENO);
+			ft_putendl_fd(argv[argc - 1], STDERR_FILENO);
+		}
 	}
+	if (ft_strncmp(argv[1], "here_doc", 8) == 0)
+		return (3);
 	pipex->fds[0] = open(argv[1], O_RDONLY);
 	if (pipex->fds[0] == -1)
 	{
@@ -62,15 +71,6 @@ static int	prepare_pipex(t_pipex *pipex, int argc, char **argv)
 		ft_putstr_fd(" :", STDERR_FILENO);
 		ft_putendl_fd(argv[1], STDERR_FILENO);
 	}
-	pipex->fds[1] = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	if (pipex->fds[1] == -1)
-	{
-		perror("");
-		ft_putstr_fd(" :", STDERR_FILENO);
-		ft_putendl_fd(argv[argc - 1], STDERR_FILENO);
-	}
-	pipex->fds[2] = 0;
-	pipex->status = 0;
 	return (2);
 }
 
