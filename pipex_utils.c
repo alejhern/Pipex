@@ -44,8 +44,11 @@ static char	*find_path(char *cmd, char **env)
 static void	comand_not_found(char **cmd, char *path)
 {
 	ft_putstr_fd("comand not found: ", 2);
-	ft_putendl_fd(cmd[0], 2);
-	ft_free_array((void ***)&cmd);
+	if (cmd)
+	{
+		ft_putendl_fd(cmd[0], 2);
+		ft_free_array((void ***)&cmd);
+	}
 	free(path);
 	exit(127);
 }
@@ -102,14 +105,16 @@ void	here_doc(char **argv, int argc, int *pipefd)
 	}
 }
 
-int	exit_status(int status, int *fds, pid_t pid)
+int	exit_status(t_pipex *pipex)
 {
-	waitpid(pid, &status, 0);
-	close(fds[0]);
-	close(fds[1]);
-	if (status & 0xFF)
-		return (128 + (status & 0x7F));
-	else if ((status >> 8) & 0xFF)
-		return ((status >> 8) & 0xFF);
+	waitpid(pipex->pid, &pipex->status, 0);
+	if (pipex->fds[0] != -1)
+		close(pipex->fds[0]);
+	if (pipex->fds[1] != -1)
+		close(pipex->fds[1]);
+	if (pipex->status & 0xFF)
+		return (128 + (pipex->status & 0x7F));
+	else if ((pipex->status >> 8) & 0xFF)
+		return ((pipex->status >> 8) & 0xFF);
 	return (0);
 }

@@ -12,83 +12,93 @@
 
 #include "pipex.h"
 
-static void	parent_procces(int *previous_fd, pid_t pid, int *pipefd, int *index,
-		int *status)
+static void	parent_process(t_pipex *pipex, int *previous_fd, int *index)
 {
-	waitpid(pid, status, 0);
-	close(pipefd[1]);
+	waitpid(pipex->pid, &pipex->status, 0);
+	close(pipex->pipefd[1]);
 	if (*index != 2)
 		close(*previous_fd);
-	*previous_fd = pipefd[0];
-	*index += 1;
+	*previous_fd = pipex->pipefd[0];
+	(*index)++;
 }
 
-static void	child_procces(char *cmd, char **env, int input_fd, int output_fd)
+static void	child_process(char *cmd, char **env, int input_fd, int output_fd)
 {
 	if (dup2(input_fd, STDIN_FILENO) == -1)
-		ft_error_exit("dup2 input_fd");
+		ft_perror_exit("dup2 input_fd");
 	if (dup2(output_fd, STDOUT_FILENO) == -1)
-		ft_error_exit("dup2 output_fd");
+		ft_perror_exit("dup2 output_fd");
 	close(input_fd);
 	close(output_fd);
 	execute(cmd, env);
 	ft_error_exit("execve");
 }
 
-static void	init_pipe(pid_t *pid, int *pipefd, int index, int argc)
+static void	init_pipe(t_pipex *pipex, int index, int argc)
 {
 	if (index != argc - 2)
 	{
-		if (pipe(pipefd) == -1)
+		if (pipe(pipex->pipefd) == -1)
 			ft_error_exit("pipe");
 	}
-	*pid = fork();
-	if (*pid == -1)
+	pipex->pid = fork();
+	if (pipex->pid == -1)
 		ft_error_exit("fork");
 }
 
-static int	prepare_pipex(int *fds, int argc, char **argv)
+static int	prepare_pipex(t_pipex *pipex, int argc, char **argv)
 {
-	if (argc < 5)
-		ft_error_exit("Usage: ./pipex <file_in> <cmd> ... <cmd> <file_out>");
-	fds[0] = open(argv[1], O_RDONLY);
-	if (fds[0] == -1)
-		ft_error_exit(argv[1]);
-	fds[1] = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	if (fds[1] == -1)
+	if (ft_strncmp(argv[1], "here_doc", 8) == 0)
 	{
-		close(fds[0]);
-		ft_error_exit(argv[argc - 1]);
+		pipex->fds[1] = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC,
+				0777);
+		pipex->fds[2] = 0;
+		return (3);
 	}
-	fds[2] = 0;
+	pipex->fds[0] = open(argv[1], O_RDONLY);
+	if (pipex->fds[0] == -1)
+	{
+		perror("");
+		ft_putstr_fd(" :", STDERR_FILENO);
+		ft_putendl_fd(argv[1], STDERR_FILENO);
+	}
+	pipex->fds[1] = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (pipex->fds[1] == -1)
+	{
+		perror("");
+		ft_putstr_fd(" :", STDERR_FILENO);
+		ft_putendl_fd(argv[argc - 1], STDERR_FILENO);
+	}
+	pipex->fds[2] = 0;
+	pipex->status = 0;
 	return (2);
 }
 
 int	main(int argc, char **argv, char **env)
 {
+	t_pipex	pipex;
 	int		index;
-	int		pipefd[2];
-	pid_t	pid;
-	int		fds[3];
-	int		status;
 
-	status = 0;
-	index = prepare_pipex(fds, argc, argv);
+	if (argc < 5)
+		ft_error_exit("Usage: ./pipex <file_in> <cmd> ... <cmd> <file_out>");
+	index = prepare_pipex(&pipex, argc, argv);
 	while (index < argc - 1)
 	{
-		init_pipe(&pid, pipefd, index, argc);
-		if (pid == 0)
+		init_pipe(&pipex, index, argc);
+		if (pipex.pid == 0)
 		{
 			if (index == 2)
-				child_procces(argv[index], env, fds[0], pipefd[1]);
+				child_process(argv[index], env, pipex.fds[0], pipex.pipefd[1]);
+			else if (index == 3 && ft_strncmp(argv[1], "here_doc", 8) == 0)
+				here_doc(argv, argc, pipex.pipefd);
 			else if (index == argc - 2)
-				child_procces(argv[index], env, fds[2], fds[1]);
+				child_process(argv[index], env, pipex.fds[2], pipex.fds[1]);
 			else
-				child_procces(argv[index], env, fds[2], pipefd[1]);
+				child_process(argv[index], env, pipex.fds[2], pipex.pipefd[1]);
 			exit(0);
 		}
 		else
-			parent_procces(&fds[2], pid, pipefd, &index, &status);
+			parent_process(&pipex, &pipex.fds[2], &index);
 	}
-	return (exit_status(status, fds, pid));
+	return (exit_status(&pipex));
 }

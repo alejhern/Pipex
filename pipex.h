@@ -14,14 +14,18 @@
 # define PIPEX_H
 
 # include "libft/libft.h"
-# include <fcntl.h>
-# include <stdio.h>
-# include <stdlib.h>
 # include <sys/wait.h>
-# include <unistd.h>
 
-void	execute(char *argv, char **envp);
-void	here_doc(char **argv, int argc, int *pipefd);
-int		exit_status(int status, int *fds, pid_t pid);
+typedef struct s_pipex
+{
+	int		pipefd[2];
+	pid_t	pid;
+	int		fds[3];
+	int		status;
+}			t_pipex;
+
+void		execute(char *argv, char **envp);
+void		here_doc(char **argv, int argc, int *pipefd);
+int			exit_status(t_pipex *pipex);
 
 #endif
