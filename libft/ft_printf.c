@@ -103,3 +103,29 @@ int	ft_printf(char const *str, ...)
 	va_end(element);
 	return (len);
 }
+
+int	ft_printf_fd(int fd, char const *str, ...)
+{
+	va_list	element;
+	int		len;
+	int		saved_fd;
+
+	saved_fd = dup(STDOUT_FILENO);
+	if (saved_fd == -1)
+		return (-1);
+	if (dup2(fd, STDOUT_FILENO) == -1)
+	{
+		close(saved_fd);
+		return (-1);
+	}
+	va_start(element, str);
+	len = ft_printer(str, element);
+	va_end(element);
+	if (dup2(saved_fd, STDOUT_FILENO) == -1)
+	{
+		close(saved_fd);
+		return (-1);
+	}
+	close(saved_fd);
+	return (len);
+}

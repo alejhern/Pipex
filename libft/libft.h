@@ -17,13 +17,14 @@
 #  define BUFFER_SIZE 42
 # endif
 
+# include <stdarg.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
 # include <fcntl.h>
 # include <limits.h>
 # include <stddef.h>
 # include <stdint.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <stdio.h>
 
 typedef struct s_list
 {
@@ -91,6 +92,7 @@ void				*ft_memmove(void *dest, const void *src, size_t n);
 void				*ft_memset(void *dest, int c, size_t len);
 // Declarations from ft_printf.c
 int					ft_printf(char const *str, ...);
+int					ft_printf_fd(int fd, char const *str, ...);
 // Declarations from ft_putchar_fd.c
 int					ft_putchar_fd(char c, int fd);
 // Declarations from ft_putendl_fd.c
