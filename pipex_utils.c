@@ -84,32 +84,30 @@ void	here_doc(char **argv, int argc, int *pipefd)
 {
 	char	*ret;
 
-	ret = NULL;
 	if (argc < 6)
 		ft_error_exit("Usage: ./pipex here_doc LIMITER <cmd> <cmd> outfile");
-	close(pipefd[0]);
 	while (1)
 	{
-		ft_putstr_fd("pipe heredoc> ", 1);
-		ret = get_next_line(0);
+		ret = NULL;
+		ft_putstr_fd("pipe heredoc> ", STDOUT_FILENO);
+		ret = get_next_line(STDIN_FILENO);
+		if (!ret)
+			break ;
 		if (ft_strncmp(ret, argv[2], ft_strlen(argv[2])) == 0)
 		{
 			free(ret);
-			exit(0);
+			break ;
 		}
 		if (ft_putstr_fd(ret, pipefd[1]) == -1)
 			ft_error_exit("Cannot write to file");
 		free(ret);
 	}
+	close(pipefd[1]);
 }
 
 int	exit_status(t_pipex *pipex)
 {
 	waitpid(pipex->pid, &pipex->status, 0);
-	if (pipex->fds[0] != -1)
-		close(pipex->fds[0]);
-	if (pipex->fds[1] != -1)
-		close(pipex->fds[1]);
 	if (pipex->status & 0xFF)
 		return (128 + (pipex->status & 0x7F));
 	else if ((pipex->status >> 8) & 0xFF)
