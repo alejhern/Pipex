@@ -80,7 +80,7 @@ int	main(int argc, char **argv, char **env)
 	int		index;
 
 	if (argc < 5)
-		ft_error_exit("Usage: ./pipex <file_in> <cmd> ... <cmd> <file_out>");
+		ft_error_exit("Usage: ./pipex infile <cmd> ... <cmd> outfile");
 	index = prepare_pipex(&pipex, argc, argv);
 	while (index < argc - 1)
 	{

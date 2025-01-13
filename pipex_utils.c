@@ -84,11 +84,9 @@ void	here_doc(char **argv, int argc, int *pipefd)
 {
 	char	*ret;
 
+	ret = NULL;
 	if (argc < 6)
-	{
-		ft_printf("Uso:%s here_doc DELIMITER <c1> ... <file_out>\n", argv[0]);
-		exit(EXIT_FAILURE);
-	}
+		ft_error_exit("Usage: ./pipex here_doc LIMITER <cmd> <cmd> outfile");
 	close(pipefd[0]);
 	while (1)
 	{
