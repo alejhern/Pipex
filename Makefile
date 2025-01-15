@@ -41,6 +41,9 @@ $(NAME): $(OBJ) $(LIBFT)
 	$(CC) $(CFLAGS) -I $(LIB_DIR) -c $< -o $@
 
 $(LIBFT):
+	@if [ ! -d "$(LIB_DIR)" ]; then \
+		git clone https://github.com/alejhern/libft.git $(LIB_DIR); \
+	fi
 	@make -C $(LIB_DIR)
 
 clean:
