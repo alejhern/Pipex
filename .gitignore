@@ -13,4 +13,4 @@
 *.txt
 *.o
 *.d
-# libft
+libft
