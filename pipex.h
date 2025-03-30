@@ -24,7 +24,6 @@ typedef struct s_pipex
 	int		status;
 }			t_pipex;
 
-void		execute(char *argv, char **envp);
 void		here_doc(char **argv, int argc, int *pipefd);
 int			exit_status(t_pipex *pipex);
 

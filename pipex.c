@@ -24,13 +24,17 @@ static void	parent_process(t_pipex *pipex, int *previous_fd, int *index)
 
 static void	child_process(char *cmd, char **env, int input_fd, int output_fd)
 {
+	int		resp;
+
 	if (dup2(input_fd, STDIN_FILENO) == -1)
 		ft_perror_exit("dup2 input_fd");
 	if (dup2(output_fd, STDOUT_FILENO) == -1)
 		ft_perror_exit("dup2 output_fd");
 	close(input_fd);
 	close(output_fd);
-	execute(cmd, env);
+	resp = ft_execute(cmd, env);
+	if (resp != 0)
+		exit(resp);
 	ft_error_exit("execve");
 }
 
